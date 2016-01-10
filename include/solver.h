@@ -28,6 +28,7 @@ class Variable: public Token {
 class Solver {
   private:
     unsigned int curr_sum;
+    bool is_solvable;
     // the equation has the following format:
     // var1 -> var2 -> varx -> total_sum -> lhs_variable_name
     std::vector<std::shared_ptr<Token>> curr_equation;

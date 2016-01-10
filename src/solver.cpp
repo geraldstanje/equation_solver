@@ -2,7 +2,7 @@
 #include <iostream>
 #include <set>
 
-Solver::Solver(): curr_sum(0) {
+Solver::Solver(): curr_sum(0), is_solvable(false) {
 }
 
 void Solver::add_equation(std::string lhs_var_name) {
@@ -23,11 +23,15 @@ void Solver::add_number(unsigned int value) {
 }
 
 void Solver::solve() {
-    while (!equations.empty()) {
+    unsigned int find_new_lhs_vars = 0;
+    unsigned int num_equations = equations.size();
+    is_solvable = false;
+
+    while (!equations.empty() && find_new_lhs_vars < num_equations) {
         auto curr_eq = equations.front();
         equations.pop();
 
-        unsigned int curr_sum = 0;
+        unsigned int total_sum = 0;
         bool lhs_var_found = true;
         std::string lhs_var_name;
 
@@ -41,7 +45,7 @@ void Solver::solve() {
 
                 auto it = lhs_var_ht.find(var->var_name);
                 if (it != lhs_var_ht.end()) {
-                    curr_sum += it->second;
+                    total_sum += it->second;
                 } else {
                     lhs_var_found = false;
                     break;
@@ -49,20 +53,30 @@ void Solver::solve() {
             } else {
                 auto box = std::dynamic_pointer_cast<Integer>(*token);
                 if (box != nullptr) {
-                    curr_sum += box->value;
+                    total_sum += box->value;
                 }
             }
         }
 
         if (!lhs_var_found) {
             equations.push(curr_eq);
+            find_new_lhs_vars++;
         } else {
-            lhs_var_ht.insert(std::make_pair(lhs_var_name, curr_sum));
+            lhs_var_ht.insert(std::make_pair(lhs_var_name, total_sum));
         }
+    }
+
+    if (equations.empty()) {
+        is_solvable = true;
     }
 }
 
 void Solver::print_solution() {
+    if (!is_solvable) {
+        std::cout << "Error: Equation System is not solvable" << std::endl;
+        return;
+    }
+
     std::set<std::string> res;
 
     for (auto &e: lhs_var_ht) {
