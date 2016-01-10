@@ -1,7 +1,7 @@
 %{
+#include "solver.h"
 #include <cstdio>
 #include <string>
-#include "solver.h"
 
 extern void yyerror(const char *msg);
 extern int yylex(void);

@@ -1,6 +1,6 @@
 %{
-#include <cstdlib>
 #include "y.tab.hpp"
+#include <cstdlib>
 
 void yyerror(const char *msg);
 %}
