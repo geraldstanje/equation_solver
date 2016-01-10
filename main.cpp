@@ -19,7 +19,10 @@ int main(int argc, char *argv[]) {
     fclose(yyin);
 
     solver.solve();
-    solver.print_solution();
+    auto sol = solver.get_solution();
+    for (auto &e: sol) {
+        std::cout << e.first << ": " << e.second << std::endl;
+    }
 
     return 0;
 }
