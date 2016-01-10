@@ -28,7 +28,7 @@ class Variable: public Token {
 class Solver {
   private:
     // the equation has the following format:
-    // lhs_variable_name -> total_sum -> var1 -> var2
+    // lhs_variable_name -> total_sum -> var1 -> var2 -> varx
     std::vector<std::shared_ptr<Token>> curr_equation;
     // stores all equations
     std::queue<std::vector<std::shared_ptr<Token>>> equations;
