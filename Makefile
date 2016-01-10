@@ -1,7 +1,7 @@
 BUILD := main
 CXX = g++
-YACC = /usr/local/opt/bison/bin/bison
-LEX = /usr/local/opt/flex/bin/flex
+YACC = bison
+LEX = flex
 CXXFLAGS = -g -Wall -Wno-deprecated-register -Wno-unused-function -std=c++11
 YACCFLAGS = -dv
 LECFLAGS = -l
