@@ -5,14 +5,14 @@
 Solver::Solver() {
 }
 
-void Solver::add_equation(std::string var_name_lhs) {
+void Solver::add_equation(std::string lhs_var_name) {
     if (curr_equation.size() == 1) {
         auto box = std::dynamic_pointer_cast<Integer>(curr_equation.front());
         if (box != nullptr) {
-            lhs_var_ht.insert(std::make_pair(var_name_lhs, box->value));
+            lhs_var_ht.insert(std::make_pair(lhs_var_name, box->value));
         }
     } else if (curr_equation.size() > 1) {
-        curr_equation.insert(curr_equation.begin(), std::make_shared<Variable>(var_name_lhs));
+        curr_equation.insert(curr_equation.begin(), std::make_shared<Variable>(lhs_var_name));
         equations.push(curr_equation);
     }
 
