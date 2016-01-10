@@ -33,6 +33,7 @@ Input
 Line
   : Line END { }
   | VARNAME EQUAL Expression END { solver.add_equation(std::string($1)); }
+  | VARNAME EQUAL Expression { solver.add_equation(std::string($1)); }
   | Line VARNAME EQUAL Expression END { solver.add_equation(std::string($2)); }
   | Line VARNAME EQUAL Expression { solver.add_equation(std::string($2)); }
   ;
