@@ -27,13 +27,14 @@ class Variable: public Token {
 
 class Solver {
   private:
+    unsigned int total_sum;
     // the equation has the following format:
-    // lhs_variable_name -> total_sum -> var1 -> var2 -> varx
+    // var1 -> var2 -> varx -> total_sum -> lhs_variable_name
     std::vector<std::shared_ptr<Token>> curr_equation;
     // stores all equations
     std::queue<std::vector<std::shared_ptr<Token>>> equations;
     // all lhs variables which are known are stored in the hashtable as follows:
-    // lhs_variable_name, value
+    // lhs_variable_name, total_sum
     std::unordered_map<std::string, unsigned int> lhs_var_ht;
 
   public:

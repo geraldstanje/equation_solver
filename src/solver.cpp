@@ -2,21 +2,16 @@
 #include <iostream>
 #include <set>
 
-Solver::Solver() {
+Solver::Solver(): total_sum(0) {
 }
 
 void Solver::add_equation(std::string lhs_var_name) {
-    if (curr_equation.size() == 1) {
-        auto box = std::dynamic_pointer_cast<Integer>(curr_equation.front());
-        if (box != nullptr) {
-            lhs_var_ht.insert(std::make_pair(lhs_var_name, box->value));
-        }
-    } else if (curr_equation.size() > 1) {
-        curr_equation.insert(curr_equation.begin(), std::make_shared<Variable>(lhs_var_name));
-        equations.push(curr_equation);
-    }
+    curr_equation.push_back(std::make_shared<Integer>(total_sum));
+    curr_equation.push_back(std::make_shared<Variable>(lhs_var_name));
+    equations.push(curr_equation);
 
     curr_equation.clear();
+    total_sum = 0;
 }
 
 void Solver::add_variable(std::string var_name) {
@@ -24,16 +19,7 @@ void Solver::add_variable(std::string var_name) {
 }
 
 void Solver::add_number(unsigned int value) {
-    if (curr_equation.size() > 0) {
-        auto box = std::dynamic_pointer_cast<Integer>(curr_equation.front());
-        if (box != nullptr) {
-            box->value += value;
-        } else {
-            curr_equation.insert(curr_equation.begin(), std::make_shared<Integer>(value));
-        }
-    } else {
-        curr_equation.insert(curr_equation.begin(), std::make_shared<Integer>(value));
-    }
+    total_sum += value;
 }
 
 void Solver::solve() {
@@ -45,10 +31,10 @@ void Solver::solve() {
         bool lhs_var_found = true;
         std::string lhs_var_name;
 
-        for (auto token = curr_eq.begin(); token != curr_eq.end(); token++) {
+        for (auto token = curr_eq.rbegin(); token != curr_eq.rend(); token++) {
             auto var = std::dynamic_pointer_cast<Variable>(*token);
             if (var != nullptr) {
-                if (token == curr_eq.begin()) {
+                if (token == curr_eq.rbegin()) {
                     lhs_var_name = var->var_name;
                     continue;
                 }
