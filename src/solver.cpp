@@ -2,16 +2,16 @@
 #include <iostream>
 #include <set>
 
-Solver::Solver(): total_sum(0) {
+Solver::Solver(): curr_sum(0) {
 }
 
 void Solver::add_equation(std::string lhs_var_name) {
-    curr_equation.push_back(std::make_shared<Integer>(total_sum));
+    curr_equation.push_back(std::make_shared<Integer>(curr_sum));
     curr_equation.push_back(std::make_shared<Variable>(lhs_var_name));
     equations.push(curr_equation);
 
     curr_equation.clear();
-    total_sum = 0;
+    curr_sum = 0;
 }
 
 void Solver::add_variable(std::string var_name) {
@@ -19,7 +19,7 @@ void Solver::add_variable(std::string var_name) {
 }
 
 void Solver::add_number(unsigned int value) {
-    total_sum += value;
+    curr_sum += value;
 }
 
 void Solver::solve() {
