@@ -23,11 +23,11 @@ void Solver::add_number(unsigned int value) {
 }
 
 void Solver::solve() {
-    unsigned int find_new_lhs_vars = 0;
+    unsigned int lhs_var_not_found_count = 0;
     unsigned int num_equations = equations.size();
     is_solvable = false;
 
-    while (!equations.empty() && find_new_lhs_vars < num_equations) {
+    while (!equations.empty() && lhs_var_not_found_count < num_equations) {
         auto curr_eq = equations.front();
         equations.pop();
 
@@ -60,7 +60,7 @@ void Solver::solve() {
 
         if (!lhs_var_found) {
             equations.push(curr_eq);
-            find_new_lhs_vars++;
+            lhs_var_not_found_count++;
         } else {
             lhs_var_ht.insert(std::make_pair(lhs_var_name, total_sum));
         }
