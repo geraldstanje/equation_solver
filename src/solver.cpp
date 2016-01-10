@@ -42,14 +42,14 @@ void Solver::solve() {
         equations.pop();
 
         unsigned int curr_sum = 0;
-        bool var_found = true;
-        std::string var_name_lhs;
+        bool lhs_var_found = true;
+        std::string lhs_var_name;
 
         for (auto token = curr_eq.begin(); token != curr_eq.end(); token++) {
             auto var = std::dynamic_pointer_cast<Variable>(*token);
             if (var != nullptr) {
                 if (token == curr_eq.begin()) {
-                    var_name_lhs = var->var_name;
+                    lhs_var_name = var->var_name;
                     continue;
                 }
 
@@ -57,7 +57,7 @@ void Solver::solve() {
                 if (it != lhs_var_ht.end()) {
                     curr_sum += it->second;
                 } else {
-                    var_found = false;
+                    lhs_var_found = false;
                     break;
                 }
             } else {
@@ -68,10 +68,10 @@ void Solver::solve() {
             }
         }
 
-        if (!var_found) {
+        if (!lhs_var_found) {
             equations.push(curr_eq);
         } else {
-            lhs_var_ht.insert(std::make_pair(var_name_lhs, curr_sum));
+            lhs_var_ht.insert(std::make_pair(lhs_var_name, curr_sum));
         }
     }
 }
