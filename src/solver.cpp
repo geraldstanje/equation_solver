@@ -6,9 +6,13 @@ Solver::Solver(): curr_sum(0), is_solvable(false) {
 }
 
 void Solver::add_equation(std::string lhs_var_name) {
-    curr_equation.push_back(std::make_shared<Integer>(curr_sum));
-    curr_equation.push_back(std::make_shared<Variable>(lhs_var_name));
-    equations.push(curr_equation);
+    if (curr_equation.empty()) {
+        lhs_var_ht.insert(std::make_pair(lhs_var_name, curr_sum));
+    } else {
+        curr_equation.push_back(std::make_shared<Integer>(curr_sum));
+        curr_equation.push_back(std::make_shared<Variable>(lhs_var_name));
+        equations.push(curr_equation);
+    }
 
     curr_equation.clear();
     curr_sum = 0;
@@ -71,13 +75,14 @@ void Solver::solve() {
     }
 }
 
-void Solver::print_solution() {
+std::vector<std::pair<std::string, unsigned int>> Solver::get_solution() {
+    std::set<std::string> res;
+    std::vector<std::pair<std::string, unsigned int>> sol;
+
     if (!is_solvable) {
         std::cout << "Error: Equation System is not solvable" << std::endl;
-        return;
+        return sol;
     }
-
-    std::set<std::string> res;
 
     for (auto &e: lhs_var_ht) {
         res.insert(e.first);
@@ -86,7 +91,9 @@ void Solver::print_solution() {
     for (auto &e: res) {
         auto it = lhs_var_ht.find(e);
         if (it != lhs_var_ht.end()) {
-            std::cout << it->first << ": " << it->second << std::endl;
+            sol.push_back(std::make_pair(it->first, it->second));
         }
     }
+
+    return sol;
 }
