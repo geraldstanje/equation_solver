@@ -53,9 +53,9 @@ bool Solver::solve() {
                     break;
                 }
             } else {
-                auto box = std::dynamic_pointer_cast<Integer>(*token);
-                if (box != nullptr) {
-                    total_sum += box->value;
+                auto integer = std::dynamic_pointer_cast<Integer>(*token);
+                if (integer != nullptr) {
+                    total_sum += integer->value;
                 }
             }
         }
