@@ -18,7 +18,11 @@ int main(int argc, char *argv[]) {
     yyparse();
     fclose(yyin);
 
-    solver.solve();
+    bool can_solve = solver.solve();
+    if (!can_solve) {
+        std::cerr << "Error: Equation System is not solvable" << std::endl;
+        return 0;
+    }
     auto sol = solver.get_solution();
     for (auto &e: sol) {
         std::cout << e.first << ": " << e.second << std::endl;

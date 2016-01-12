@@ -15,8 +15,9 @@ int main(int argc, char *argv[]) {
     yyparse();
     fclose(yyin);
 
-    solver.solve();
-
+    bool can_solve = solver.solve();
+    assert(can_solve == true);
+    
     std::vector<std::pair<std::string, unsigned int>> expected_solution = {{"location", 16},
         {"offset", 7},
         {"origin", 8},

@@ -1,8 +1,7 @@
 #include "solver.h"
-#include <iostream>
 #include <set>
 
-Solver::Solver(): curr_sum(0), is_solvable(false) {
+Solver::Solver(): curr_sum(0) {
 }
 
 void Solver::add_equation(std::string lhs_var_name) {
@@ -26,10 +25,9 @@ void Solver::add_number(unsigned int value) {
     curr_sum += value;
 }
 
-void Solver::solve() {
+bool Solver::solve() {
     unsigned int lhs_var_not_found_count = 0;
     unsigned int num_equations = equations.size();
-    is_solvable = false;
 
     while (!equations.empty() && lhs_var_not_found_count < num_equations) {
         auto curr_eq = equations.front();
@@ -71,18 +69,14 @@ void Solver::solve() {
     }
 
     if (equations.empty()) {
-        is_solvable = true;
+        return true;
     }
+    return false;
 }
 
 std::vector<std::pair<std::string, unsigned int>> Solver::get_solution() {
     std::set<std::string> res;
     std::vector<std::pair<std::string, unsigned int>> sol;
-
-    if (!is_solvable) {
-        std::cout << "Error: Equation System is not solvable" << std::endl;
-        return sol;
-    }
 
     for (auto &e: lhs_var_ht) {
         res.insert(e.first);

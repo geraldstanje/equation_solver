@@ -27,7 +27,6 @@ class Variable: public Token {
 class Solver {
   private:
     unsigned int curr_sum;
-    bool is_solvable;
     // the equation will be stored in the following format:
     // var1 -> var2 -> varx -> total_sum -> lhs_variable_name
     std::vector<std::shared_ptr<Token>> curr_equation;
@@ -42,8 +41,8 @@ class Solver {
     void add_equation(std::string lhs_var_name);
     void add_variable(std::string var_name);
     void add_number(unsigned int value);
-    void solve();
-    void print_solution();
+    bool solve();
+    std::vector<std::pair<std::string, unsigned int>> get_solution();
 };
 
 #endif
