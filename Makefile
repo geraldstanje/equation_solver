@@ -7,7 +7,6 @@ YACCFLAGS = -dv
 LECFLAGS = -l
 INCDIR = ./include
 SRCDIR = src
-TESTDIR = test
 LIBDIR = -L/usr/local/opt/flex/lib -L/usr/local/opt/bison/lib
 LIBS = -lfl -ly
 OBJ = solver.o y.tab.o lex.yy.o main.o
