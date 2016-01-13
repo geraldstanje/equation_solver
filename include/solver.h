@@ -36,6 +36,9 @@ class Solver {
     // lhs_variable_name, total_sum
     std::unordered_map<std::string, unsigned int> lhs_var_ht;
 
+  private:
+    void increment_total_sum(std::string var_name, unsigned int &total_sum, bool &lhs_var_found);
+
   public:
     Solver();
     void add_equation(std::string lhs_var_name);

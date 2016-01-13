@@ -25,6 +25,15 @@ void Solver::add_number(unsigned int value) {
     curr_sum += value;
 }
 
+void Solver::increment_total_sum(std::string var_name, unsigned int &total_sum, bool &lhs_var_found) {
+    auto it = lhs_var_ht.find(var_name);
+    if (it != lhs_var_ht.end()) {
+        total_sum += it->second;
+    } else {
+        lhs_var_found = false;
+    }
+}
+
 bool Solver::solve() {
     unsigned int lhs_var_not_found_count = 0;
     unsigned int num_equations = equations.size();
@@ -45,11 +54,8 @@ bool Solver::solve() {
                     continue;
                 }
 
-                auto it = lhs_var_ht.find(var->var_name);
-                if (it != lhs_var_ht.end()) {
-                    total_sum += it->second;
-                } else {
-                    lhs_var_found = false;
+                increment_total_sum(var->var_name, total_sum, lhs_var_found);
+                if (!lhs_var_found) {
                     break;
                 }
             } else {
