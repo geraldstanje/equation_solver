@@ -25,13 +25,34 @@ void Solver::add_number(unsigned int value) {
     curr_sum += value;
 }
 
-void Solver::increment_total_sum(std::string var_name, unsigned int &total_sum, bool &lhs_var_found) {
-    auto it = lhs_var_ht.find(var_name);
-    if (it != lhs_var_ht.end()) {
-        total_sum += it->second;
-    } else {
-        lhs_var_found = false;
+bool Solver::update_hashtable(std::shared_ptr<Token> iter, const unsigned int &total_sum) {
+    auto var = std::dynamic_pointer_cast<Variable>(iter);
+    if (var != nullptr) {
+        lhs_var_ht.insert(std::make_pair(var->var_name, total_sum));
+        return true;
     }
+    return false;
+}
+
+bool Solver::update_total_sum_var_tok(std::shared_ptr<Token> token, unsigned int &total_sum) {
+    auto var = std::dynamic_pointer_cast<Variable>(token);
+    if (var != nullptr) {
+        auto it = lhs_var_ht.find(var->var_name);
+        if (it != lhs_var_ht.end()) {
+          total_sum += it->second;
+          return true;
+        }
+    }
+    return false;
+}
+
+bool Solver::update_total_sum_int_tok(std::shared_ptr<Token> token, unsigned int &total_sum) {
+    auto integer = std::dynamic_pointer_cast<Integer>(token);
+    if (integer != nullptr) {
+        total_sum += integer->value;
+        return true;
+    }
+    return false;
 }
 
 bool Solver::solve() {
@@ -44,33 +65,24 @@ bool Solver::solve() {
 
         unsigned int total_sum = 0;
         bool lhs_var_found = true;
-        std::string lhs_var_name;
 
-        for (auto token = curr_eq.rbegin(); token != curr_eq.rend(); token++) {
-            auto var = std::dynamic_pointer_cast<Variable>(*token);
-            if (var != nullptr) {
-                if (token == curr_eq.rbegin()) {
-                    lhs_var_name = var->var_name;
-                    continue;
-                }
+        for (auto token = curr_eq.rbegin()+1; token != curr_eq.rend(); token++) {
+            bool is_interger = update_total_sum_int_tok(*token, total_sum);
+            if (is_interger) {
+                continue;
+            }
 
-                increment_total_sum(var->var_name, total_sum, lhs_var_found);
-                if (!lhs_var_found) {
-                    break;
-                }
-            } else {
-                auto integer = std::dynamic_pointer_cast<Integer>(*token);
-                if (integer != nullptr) {
-                    total_sum += integer->value;
-                }
+            bool is_var = update_total_sum_var_tok(*token, total_sum);
+            if (!is_var) {
+                equations.push(curr_eq);
+                lhs_var_found = false;
+                lhs_var_not_found_count++;
+                break;
             }
         }
 
-        if (!lhs_var_found) {
-            equations.push(curr_eq);
-            lhs_var_not_found_count++;
-        } else {
-            lhs_var_ht.insert(std::make_pair(lhs_var_name, total_sum));
+        if (lhs_var_found) {
+            update_hashtable(*curr_eq.rbegin(), total_sum);
         }
     }
 

@@ -37,7 +37,9 @@ class Solver {
     std::unordered_map<std::string, unsigned int> lhs_var_ht;
 
   private:
-    void increment_total_sum(std::string var_name, unsigned int &total_sum, bool &lhs_var_found);
+    bool update_hashtable(std::shared_ptr<Token> iter, const unsigned int &total_sum);
+    bool update_total_sum_int_tok(std::shared_ptr<Token> token, unsigned int &total_sum);
+    bool update_total_sum_var_tok(std::shared_ptr<Token> token, unsigned int &total_sum);
 
   public:
     Solver();
