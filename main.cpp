@@ -10,7 +10,7 @@ extern Solver solver;
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        fprintf(stderr, "usage: %s filename\n", argv[0]);
+        std::cerr << "usage: " << argv[0] << " filename" << std::endl;
         exit(1);
     }
 
