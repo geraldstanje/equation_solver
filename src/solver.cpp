@@ -39,8 +39,8 @@ bool Solver::update_total_sum_var_tok(std::shared_ptr<Token> token, unsigned int
     if (var != nullptr) {
         auto it = lhs_var_ht.find(var->var_name);
         if (it != lhs_var_ht.end()) {
-          total_sum += it->second;
-          return true;
+            total_sum += it->second;
+            return true;
         }
     }
     return false;
@@ -53,6 +53,12 @@ bool Solver::update_total_sum_int_tok(std::shared_ptr<Token> token, unsigned int
         return true;
     }
     return false;
+}
+
+void Solver::update(const std::vector<std::shared_ptr<Token>> &curr_eq, bool &lhs_var_found, unsigned int &lhs_var_not_found_count) {
+    equations.push(curr_eq);
+    lhs_var_found = false;
+    lhs_var_not_found_count++;
 }
 
 bool Solver::solve() {
@@ -73,10 +79,12 @@ bool Solver::solve() {
             }
 
             bool is_var = update_total_sum_var_tok(*token, total_sum);
+            if (!is_interger && !is_var) {
+                return false;
+            }
+            
             if (!is_var) {
-                equations.push(curr_eq);
-                lhs_var_found = false;
-                lhs_var_not_found_count++;
+                update(curr_eq, lhs_var_found, lhs_var_not_found_count);
                 break;
             }
         }
